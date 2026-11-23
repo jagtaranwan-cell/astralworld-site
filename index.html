@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Astralworld — Space, Universe & Sci-Fi</title>
+<meta name="description" content="Astralworld (@astralworld1) — cinematic space visuals, universe documentaries and sci-fi series like Kiran & Rov.">
+<style>
+  :root {
+    --bg: #05060f;
+    --bg-soft: #0a0d1f;
+    --card: rgba(17, 22, 48, .72);
+    --line: rgba(140, 160, 255, .16);
+    --text: #eef1ff;
+    --muted: #9aa3c7;
+    --cyan: #4fe4ff;
+    --violet: #9d7bff;
+    --pink: #ff7ad9;
+    --radius: 20px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(ellipse 60% 45% at 85% 8%, rgba(90, 60, 220, .28), transparent 70%),
+      radial-gradient(ellipse 55% 45% at 8% 40%, rgba(0, 170, 220, .16), transparent 70%),
+      radial-gradient(ellipse 70% 50% at 50% 100%, rgba(120, 40, 160, .18), transparent 70%),
+      linear-gradient(180deg, #05060f, #070a18 60%, #05060f);
+  }
+  #starfield { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+  a { color: inherit; text-decoration: none; }
+  img, svg { max-width: 100%; }
+  .wrap { width: min(1120px, 100% - 40px); margin-inline: auto; }
+  .gradient-text {
+    background: linear-gradient(100deg, var(--cyan), #b4a2ff 55%, var(--pink));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* ---------- header ---------- */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    background: rgba(5, 6, 15, .7);
+    border-bottom: 1px solid var(--line);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 68px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.15rem; letter-spacing: -.02em; }
+  .brand-mark {
+    display: grid;
+    place-items: center;
+    width: 34px; height: 34px;
+    border-radius: 11px;
+    font-size: 1.1rem;
+    background: linear-gradient(140deg, var(--cyan), var(--violet));
+    box-shadow: 0 0 24px rgba(100, 130, 255, .45);
+    color: #08102a;
+  }
+  .brand span.accent { color: var(--cyan); }
+  .nav-toggle {
+    display: none;
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,.05);
+    color: var(--text);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+  nav { display: flex; align-items: center; gap: 6px; }
+  nav a {
+    color: var(--muted);
+    font-size: .9rem;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 999px;
+    transition: color .2s, background .2s;
+  }
+  nav a:hover { color: var(--text); background: rgba(255,255,255,.07); }
+  nav a.nav-cta {
+    color: #06091a;
+    background: linear-gradient(100deg, var(--cyan), #a58bff);
+    margin-left: 6px;
+  }
+  nav a.nav-cta:hover { filter: brightness(1.12); color: #06091a; }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    min-height: min(760px, calc(100svh - 68px));
+    display: flex;
+    align-items: center;
+    padding: 70px 0 90px;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr .85fr;
+    align-items: center;
+    gap: 40px;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(255,255,255,.04);
+    color: #c7d0ff;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+  .pulse {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 0 0 rgba(79, 228, 255, .7);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 70% { box-shadow: 0 0 0 10px rgba(79,228,255,0); } 100% { box-shadow: 0 0 0 0 rgba(79,228,255,0); } }
+  .handle {
+    display: inline-block;
+    margin-top: 22px;
+    color: var(--cyan);
+    font-weight: 700;
+    letter-spacing: .04em;
+    font-size: .98rem;
+  }
+  h1 {
+    font-size: clamp(2.6rem, 6.4vw, 4.8rem);
+    line-height: 1.06;
+    letter-spacing: -.045em;
+    margin: 10px 0 20px;
+    font-weight: 850;
+  }
+  .hero-copy {
+    color: var(--muted);
+    font-size: clamp(1rem, 2.1vw, 1.15rem);
+    max-width: 520px;
+  }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 12px 22px;
+    border-radius: 13px;
+    font-size: .93rem;
+    font-weight: 750;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s, filter .2s;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary {
+    background: linear-gradient(100deg, var(--cyan), #8c7bff 70%, var(--pink));
+    color: #050816;
+    box-shadow: 0 10px 34px rgba(87, 113, 255, .32);
+  }
+  .btn-primary:hover { box-shadow: 0 14px 40px rgba(87, 113, 255, .48); }
+  .btn-ghost {
+    background: rgba(255,255,255,.05);
+    border-color: var(--line);
+    color: var(--text);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,.1); }
+  .hero-meta { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 34px; color: var(--muted); font-size: .82rem; }
+  .hero-meta span { display: flex; align-items: center; gap: 7px; }
+
+  /* CSS planet */
+  .planet-stage { position: relative; display: grid; place-items: center; min-height: 380px; }
+  .planet {
+    position: relative;
+    width: min(330px, 70vw);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 26%, rgba(255,255,255,.5), transparent 9%),
+      radial-gradient(circle at 34% 30%, #6d8bff 0%, #3b3a9c 38%, #18143f 72%, #08091c 100%);
+    box-shadow: inset -28px -18px 60px rgba(0,0,0,.65), 0 0 90px rgba(90, 100, 255, .35);
+    animation: float 8s ease-in-out infinite;
+  }
+  .planet::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: repeating-linear-gradient(168deg, transparent 0 22px, rgba(255,255,255,.05) 23px 27px, transparent 28px 52px);
+    mix-blend-mode: screen;
+  }
+  .ring {
+    position: absolute;
+    width: 132%;
+    height: 40%;
+    border: 2px solid rgba(140, 190, 255, .45);
+    border-radius: 50%;
+    transform: rotate(-20deg);
+    box-shadow: 0 0 22px rgba(80, 190, 255, .18);
+  }
+  .moon {
+    position: absolute;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #dce7ff, #6b79a8 60%, #1b2044);
+    box-shadow: 0 0 20px rgba(200, 220, 255, .5);
+    top: 6%; right: 2%;
+    animation: float 6s ease-in-out infinite reverse;
+  }
+  @keyframes float { 50% { transform: translateY(-16px); } }
+
+  /* ---------- sections ---------- */
+  .section { padding: 88px 0; }
+  .section-head { max-width: 640px; margin-bottom: 38px; }
+  .section-tag {
+    color: var(--cyan);
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+  .section-head h2 {
+    font-size: clamp(1.9rem, 4.4vw, 2.9rem);
+    letter-spacing: -.035em;
+    line-height: 1.15;
+    margin: 10px 0 12px;
+  }
+  .section-head p { color: var(--muted); }
+
+  /* video cards */
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    display: flex;
+    flex-direction: column;
+    transition: transform .25s, border-color .25s, box-shadow .25s;
+  }
+  .card:hover { transform: translateY(-6px); border-color: rgba(130, 165, 255, .45); box-shadow: 0 22px 60px rgba(0,0,0,.35); }
+  .card-art {
+    position: relative;
+    height: 172px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .card-art::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(8,10,25,.9), transparent 65%);
+  }
+  .art-mars { background: radial-gradient(circle at 50% 120%, #ff8a52, #8e2c4c 45%, #1a1030 85%); }
+  .art-universe { background: radial-gradient(circle at 35% 40%, #b07bff, #312c9c 45%, #080b21 85%); }
+  .art-morning { background: radial-gradient(circle at 70% 100%, #ffd29b, #b3546c 40%, #15122e 85%); }
+  .art-icon { font-size: 4rem; filter: drop-shadow(0 8px 18px rgba(0,0,0,.5)); z-index: 1; }
+  .art-tag {
+    position: absolute;
+    z-index: 2;
+    top: 14px; left: 14px;
+    background: rgba(5,7,18,.65);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px 11px;
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .1em;
+  }
+  .card-body { padding: 24px; display: flex; flex-direction: column; flex: 1; }
+  .card-kicker { color: var(--cyan); font-size: .76rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+  .card h3 { font-size: 1.35rem; margin: 6px 0 10px; letter-spacing: -.02em; }
+  .card p { color: var(--muted); font-size: .92rem; margin-bottom: 22px; flex: 1; }
+  .btn-outline {
+    align-self: flex-start;
+    background: rgba(79, 228, 255, .08);
+    border-color: rgba(79, 228, 255, .35);
+    color: var(--cyan);
+    min-height: 42px;
+    padding: 9px 17px;
+    font-size: .86rem;
+  }
+  .btn-outline:hover { background: rgba(79, 228, 255, .18); }
+
+  /* prompt helper */
+  .helper-box {
+    border: 1px solid var(--line);
+    border-radius: 26px;
+    background: linear-gradient(160deg, rgba(24, 29, 62, .9), rgba(10, 13, 32, .92));
+    padding: clamp(20px, 4vw, 36px);
+    box-shadow: 0 24px 70px rgba(0,0,0,.3);
+  }
+  .helper-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+  .field-label { display: block; font-size: .85rem; font-weight: 700; margin-bottom: 9px; color: #d8defb; }
+  textarea, input, select {
+    width: 100%;
+    font: inherit;
+    color: var(--text);
+    background: rgba(5, 7, 20, .7);
+    border: 1px solid var(--line);
+    border-radius: 13px;
+    padding: 13px 15px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  textarea:focus, input:focus, select:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(79,228,255,.12); }
+  textarea { min-height: 170px; resize: vertical; }
+  select { appearance: none; cursor: pointer; }
+  ::placeholder { color: #6d769c; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .chip {
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,.04);
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: .76rem;
+    cursor: pointer;
+  }
+  .chip:hover { color: var(--cyan); border-color: rgba(79,228,255,.4); }
+  .helper-actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+  .output-box {
+    min-height: 290px;
+    background: rgba(4, 6, 17, .78);
+    border: 1px dashed rgba(140, 165, 255, .3);
+    border-radius: 13px;
+    padding: 16px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: .8rem;
+    line-height: 1.7;
+    color: #cbd6ff;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow: auto;
+    max-height: 420px;
+  }
+  .output-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+  .btn-sm { min-height: 40px; padding: 8px 16px; font-size: .82rem; }
+
+  /* about + contact */
+  .about-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 48px; align-items: start; }
+  .about-copy p { color: var(--muted); margin-bottom: 16px; }
+  .about-list { list-style: none; margin-top: 22px; display: grid; gap: 12px; }
+  .about-list li { display: flex; gap: 12px; align-items: flex-start; color: #d5dcf8; font-size: .94rem; }
+  .about-list .tick { color: var(--cyan); font-weight: 900; }
+  .contact-card {
+    border: 1px solid var(--line);
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: clamp(20px, 4vw, 30px);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  .contact-card h3 { font-size: 1.25rem; margin-bottom: 4px; }
+  .contact-card > p { color: var(--muted); font-size: .88rem; margin-bottom: 20px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: .8rem; font-weight: 700; margin-bottom: 7px; color: #cfd7f8; }
+  .result-box {
+    margin-top: 18px;
+    border: 1px solid rgba(79,228,255,.35);
+    border-radius: 13px;
+    background: rgba(79,228,255,.05);
+    padding: 15px;
+  }
+  .result-box pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: .78rem;
+    color: #cbd6ff;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .contact-direct {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: .86rem;
+  }
+  .contact-direct a { color: var(--cyan); font-weight: 700; }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 28px 0;
+    color: var(--muted);
+    font-size: .84rem;
+  }
+  .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  footer a { color: var(--cyan); }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translate(-50%, 20px);
+    background: #151b3c;
+    border: 1px solid rgba(79,228,255,.45);
+    color: var(--text);
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: .88rem;
+    box-shadow: 0 12px 40px rgba(0,0,0,.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s, transform .25s;
+    z-index: 100;
+    text-align: center;
+    max-width: calc(100% - 32px);
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 900px) {
+    .hero-grid, .about-grid { grid-template-columns: 1fr; }
+    .planet-stage { min-height: 260px; order: -1; }
+    .planet { width: min(240px, 55vw); }
+    .cards { grid-template-columns: repeat(2, 1fr); }
+    .helper-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .wrap { width: min(1120px, 100% - 32px); }
+    .nav-toggle { display: block; }
+    nav {
+      display: none;
+      position: absolute;
+      top: 68px; left: 0; right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 4px;
+      padding: 12px 16px 18px;
+      background: rgba(6, 8, 20, .97);
+      border-bottom: 1px solid var(--line);
+    }
+    nav.open { display: flex; }
+    nav a { padding: 12px 14px; }
+    nav a.nav-cta { margin: 4px 0 0; text-align: center; }
+    .hero { padding: 44px 0 64px; min-height: auto; }
+    .section { padding: 64px 0; }
+    .cards, .form-row { grid-template-columns: 1fr; }
+    .card-art { height: 150px; }
+    .hero-meta { gap: 12px; }
+    .footer-inner { justify-content: center; text-align: center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+<canvas id="starfield" aria-hidden="true"></canvas>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top"><span class="brand-mark">✦</span><span>Astral<span class="accent">world</span></span></a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+    <nav id="nav">
+      <a href="#top">Home</a>
+      <a href="#videos">Videos</a>
+      <a href="#helper">AI Helper</a>
+      <a href="#about">About</a>
+      <a class="nav-cta" href="https://www.youtube.com/@astralworld1" target="_blank" rel="noopener">▶ Subscribe</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow"><span class="pulse"></span> Space · Universe · Sci-Fi</div>
+        <div class="handle">@astralworld1</div>
+        <h1>Journey beyond<br><span class="gradient-text">the known universe.</span></h1>
+        <p class="hero-copy">Cinematic journeys through space — from the birth of the cosmos to the red sands of Mars, and the stories of the people who dare to go there.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="https://www.youtube.com/@astralworld1" target="_blank" rel="noopener">▶ Visit YouTube Channel</a>
+          <a class="btn btn-ghost" href="#videos">Explore Videos ↓</a>
+        </div>
+        <div class="hero-meta">
+          <span>🌌 Universe explained</span>
+          <span>🚀 Sci-fi series</span>
+          <span>🎬 Cinematic visuals</span>
+        </div>
+      </div>
+      <div class="planet-stage" aria-hidden="true">
+        <div class="ring"></div>
+        <div class="planet"></div>
+        <div class="moon"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED VIDEOS -->
+  <section class="section" id="videos">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="section-tag">Featured Videos / Series</div>
+        <h2>Stories from the <span class="gradient-text">edge of space</span></h2>
+        <p>Handpicked worlds, missions and mysteries from the Astralworld universe.</p>
+      </div>
+      <div class="cards">
+        <article class="card reveal">
+          <div class="card-art art-mars"><span class="art-tag">SCI-FI SERIES</span><span class="art-icon">🪐</span></div>
+          <div class="card-body">
+            <span class="card-kicker">Mars Expedition</span>
+            <h3>Kiran &amp; Rov</h3>
+            <p>Two explorers, one fragile habitat, and a red planet full of secrets. A cinematic sci-fi survival series.</p>
+            <a class="btn btn-outline" href="https://www.youtube.com/@astralworld1/search?query=Kiran%20Rov" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+          </div>
+        </article>
+        <article class="card reveal">
+          <div class="card-art art-universe"><span class="art-tag">DOCUMENTARY</span><span class="art-icon">🌌</span></div>
+          <div class="card-body">
+            <span class="card-kicker">Cosmic Origins</span>
+            <h3>Birth of the Universe</h3>
+            <p>From the first flash of the Big Bang to galaxies, stars and everything in between — the ultimate origin story.</p>
+            <a class="btn btn-outline" href="https://www.youtube.com/@astralworld1/search?query=Birth%20of%20the%20Universe" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+          </div>
+        </article>
+        <article class="card reveal">
+          <div class="card-art art-morning"><span class="art-tag">VISUAL FILM</span><span class="art-icon">🚀</span></div>
+          <div class="card-body">
+            <span class="card-kicker">Red Planet</span>
+            <h3>Morning on Mars</h3>
+            <p>Sunrise over the dust plains of Mars. A quiet, breathtaking visual journey across an alien morning.</p>
+            <a class="btn btn-outline" href="https://www.youtube.com/@astralworld1/search?query=Morning%20on%20Mars" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROMPT HELPER -->
+  <section class="section" id="helper">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="section-tag">Creator Tools</div>
+        <h2>Video Prompt &amp; <span class="gradient-text">Script Helper</span></h2>
+        <p>Ek scene likho — Astralworld style ka ready-to-copy visual aur voiceover prompt mil jayega.</p>
+      </div>
+      <div class="helper-box reveal">
+        <div class="helper-grid">
+          <div>
+            <label class="field-label" for="idea">Your video idea / scene</label>
+            <textarea id="idea" placeholder="e.g. An astronaut finds a glowing portal inside a Mars crater at sunrise..."></textarea>
+            <div class="chips">
+              <button class="chip" data-idea="An astronaut discovers a glowing portal inside a Mars crater at sunrise">Mars portal</button>
+              <button class="chip" data-idea="A camera flies through a black hole into a bright unknown galaxy">Black hole</button>
+              <button class="chip" data-idea="Kiran and Rov repair their habitat during a Martian dust storm">Kiran &amp; Rov</button>
+            </div>
+            <div class="field" style="margin-top:18px">
+              <label class="field-label" for="style">Visual style</label>
+              <select id="style">
+                <option value="Cinematic sci-fi">Cinematic sci-fi</option>
+                <option value="Space documentary">Space documentary</option>
+                <option value="Dreamy ambient visual film">Dreamy ambient visual film</option>
+              </select>
+            </div>
+            <div class="helper-actions">
+              <button class="btn btn-primary" id="generate">✨ Generate Prompt</button>
+              <button class="btn btn-ghost btn-sm" id="clear">Clear</button>
+            </div>
+          </div>
+          <div>
+            <label class="field-label" for="output">Ready-to-copy prompt</label>
+            <div class="output-box" id="output" aria-live="polite">✦ Tumhara prompt yahin ban kar dikhega...
+
+1. Apna idea likho (ya upar diye gaye chips me se koi chuno).
+2. "Generate Prompt" dabao.
+3. Copy karke apne AI video tool me paste karo.</div>
+            <div class="output-actions">
+              <button class="btn btn-primary btn-sm" id="copy">⧉ Copy Prompt</button>
+              <span style="color:var(--muted);font-size:.78rem;align-self:center">Visual + voiceover + on-screen text included</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT + CONTACT -->
+  <section class="section" id="about">
+    <div class="wrap about-grid">
+      <div class="about-copy reveal">
+        <div class="section-tag">About &amp; Contact</div>
+        <h2 style="font-size:clamp(1.9rem,4.4vw,2.9rem);letter-spacing:-.035em;line-height:1.15;margin:10px 0 16px">The universe, <span class="gradient-text">one story at a time.</span></h2>
+        <p>Astralworld (@astralworld1) ek space aur sci-fi channel hai jahan cosmos ki mystery, NASA-style visuals aur imaginative stories ek saath milti hain. Har video ko cinematic experience banane ki koshish — chaho wo Mars par suraj ugte dikhaana ho ya universe ki paidaish.</p>
+        <p>Hum research, storytelling aur AI-assisted visuals ka istemal karke science ko engaging aur visually unforgettable banate hain.</p>
+        <ul class="about-list">
+          <li><span class="tick">✦</span> Space documentaries &amp; universe explainers</li>
+          <li><span class="tick">✦</span> Original sci-fi series (Kiran &amp; Rov)</li>
+          <li><span class="tick">✦</span> Collaborations, brand integrations &amp; creator projects</li>
+        </ul>
+      </div>
+      <div class="contact-card reveal">
+        <h3>Let's collaborate 🚀</h3>
+        <p>Collaboration, business inquiry ya koi idea? Neeche detail bharo — ek ready message ban jayega.</p>
+        <form id="contactForm">
+          <div class="form-row">
+            <div class="field"><label for="cname">Your name</label><input id="cname" required placeholder="Naam"></div>
+            <div class="field"><label for="cemail">Your email</label><input id="cemail" type="email" required placeholder="you@example.com"></div>
+          </div>
+          <div class="field">
+            <label for="ctopic">Topic</label>
+            <select id="ctopic">
+              <option>Collaboration</option>
+              <option>Business inquiry</option>
+              <option>Content idea</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field"><label for="cmsg">Message</label><textarea id="cmsg" required placeholder="Apna message likho..." style="min-height:110px"></textarea></div>
+          <button class="btn btn-primary" type="submit">Prepare Inquiry ✉️</button>
+        </form>
+        <div class="result-box" id="resultBox" hidden>
+          <strong style="font-size:.85rem;color:var(--cyan)">✅ Inquiry ready</strong>
+          <pre id="resultText"></pre>
+          <div class="output-actions">
+            <button class="btn btn-ghost btn-sm" id="copyInquiry">⧉ Copy message</button>
+            <a class="btn btn-outline btn-sm" id="mailLink" href="mailto:">✉️ Open in mail app</a>
+          </div>
+        </div>
+        <div class="contact-direct">Prefer YouTube? <a href="https://www.youtube.com/@astralworld1" target="_blank" rel="noopener">Message the channel @astralworld1 ↗</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>✦ Astralworld · @astralworld1 — Made for the curious.</span>
+    <span><a href="https://www.youtube.com/@astralworld1" target="_blank" rel="noopener">YouTube ↗</a> · <a href="#top">Back to top ↑</a></span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ---------- starfield ---------- */
+(function () {
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let stars = [], w = 0, h = 0, last = 0;
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth; h = window.innerHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const count = Math.min(180, Math.round(w * h / 7500));
+    stars = Array.from({ length: count }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 1.4 + .3,
+      a: Math.random() * .55 + .2,
+      v: Math.random() * .11 + .02,
+      tw: Math.random() * Math.PI * 2
+    }));
+    draw(0);
+  }
+  function draw(t) {
+    ctx.clearRect(0, 0, w, h);
+    for (const s of stars) {
+      if (!reduced) { s.y += s.v; if (s.y > h) { s.y = 0; s.x = Math.random() * w; } }
+      const alpha = s.a + (reduced ? 0 : Math.sin(t / 700 + s.tw) * .16);
+      ctx.fillStyle = 'rgba(200, 220, 255,' + Math.max(.08, alpha) + ')';
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+  function loop(t) {
+    if (t - last > 40) { draw(t); last = t; }
+    requestAnimationFrame(loop);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+  if (!reduced) requestAnimationFrame(loop);
+})();
+
+/* ---------- ui helpers ---------- */
+const toastEl = document.getElementById('toast');
+let toastTimer;
+function toast(msg) {
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2600);
+}
+async function copyText(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      const tmp = document.createElement('textarea');
+      tmp.value = text;
+      tmp.style.position = 'fixed';
+      tmp.style.opacity = '0';
+      document.body.appendChild(tmp);
+      tmp.select();
+      document.execCommand('copy');
+      tmp.remove();
+    }
+    return true;
+  } catch (e) { return false; }
+}
+
+/* mobile nav */
+const navToggle = document.getElementById('navToggle');
+const nav = document.getElementById('nav');
+navToggle.addEventListener('click', () => {
+  const open = nav.classList.toggle('open');
+  navToggle.setAttribute('aria-expanded', String(open));
+  navToggle.textContent = open ? '✕' : '☰';
+});
+nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  nav.classList.remove('open');
+  navToggle.setAttribute('aria-expanded', 'false');
+  navToggle.textContent = '☰';
+}));
+
+/* scroll reveal */
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+} else {
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+}
+
+/* ---------- prompt helper ---------- */
+const ideaEl = document.getElementById('idea');
+const styleEl = document.getElementById('style');
+const outputEl = document.getElementById('output');
+const PLACEHOLDER = outputEl.textContent;
+let generatedPrompt = '';
+
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    ideaEl.value = chip.dataset.idea;
+    ideaEl.focus();
+  });
+});
+
+document.getElementById('generate').addEventListener('click', () => {
+  const idea = ideaEl.value.trim().replace(/\s+/g, ' ');
+  if (!idea) { toast('Pehle ek idea ya scene likho ✍️'); ideaEl.focus(); return; }
+  const style = styleEl.value;
+  generatedPrompt =
+`ASTRAWORLD — AI VIDEO PROMPT
+Style: ${style}
+
+[VISUAL DIRECTION]
+Create a 20-30 second cinematic ${style.toLowerCase()} sequence about: "${idea}"
+Open with a slow, wide establishing shot in deep space; use sweeping camera movement, volumetric light, realistic scale, fine dust/particle detail and a deep contrast color palette of indigo, cyan and warm amber. Move into a medium shot revealing the key subject, then a dramatic close-up, ending on a slow pull-back that shows the vastness of space. 16:9, high detail, film grain, smooth motion, no text burned into the video.
+
+[VOICEOVER — calm cinematic narrator, 25-30 sec]
+"In the silence between stars, everything begins with a question. ${idea.charAt(0).toUpperCase() + idea.slice(1)}. In that moment, the unknown becomes a story — and the story becomes ours. This is Astralworld. Journey beyond the known universe."
+
+[ON-SCREEN TEXT]
+Astralworld · @astralworld1
+"Beyond the known universe"
+
+[SUGGESTED TAGS]
+#Astralworld #Space #Universe #SciFi #Cosmos #Mars #SpaceExploration`;
+  outputEl.textContent = generatedPrompt;
+  toast('Prompt ready! Copy karke use karo ✨');
+});
+
+document.getElementById('clear').addEventListener('click', () => {
+  ideaEl.value = '';
+  outputEl.textContent = PLACEHOLDER;
+  generatedPrompt = '';
+  ideaEl.focus();
+});
+
+document.getElementById('copy').addEventListener('click', async () => {
+  if (!generatedPrompt) { toast('Pehle Generate Prompt dabao ✨'); return; }
+  toast(await copyText(generatedPrompt) ? 'Prompt copied! ✅' : 'Copy fail — text select karke manually copy karo.');
+});
+
+/* ---------- contact form ---------- */
+const form = document.getElementById('contactForm');
+const resultBox = document.getElementById('resultBox');
+const resultText = document.getElementById('resultText');
+const mailLink = document.getElementById('mailLink');
+let inquiryText = '';
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  if (!form.reportValidity()) return;
+  const name = document.getElementById('cname').value.trim();
+  const email = document.getElementById('cemail').value.trim();
+  const topic = document.getElementById('ctopic').value;
+  const msg = document.getElementById('cmsg').value.trim();
+  inquiryText = `New inquiry — Astralworld (@astralworld1)\n\nName: ${name}\nEmail: ${email}\nTopic: ${topic}\n\nMessage:\n${msg}`;
+  resultText.textContent = inquiryText;
+  mailLink.href = 'mailto:?subject=' + encodeURIComponent('Astralworld inquiry — ' + topic) + '&body=' + encodeURIComponent(inquiryText);
+  resultBox.hidden = false;
+  resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  toast('Inquiry ready — copy karo ya mail app mein kholo ✉️');
+});
+
+document.getElementById('copyInquiry').addEventListener('click', async () => {
+  toast(await copyText(inquiryText) ? 'Message copied! ✅' : 'Copy fail — text select karke manually copy karo.');
+});
+</script>
+</body>
+</html>
